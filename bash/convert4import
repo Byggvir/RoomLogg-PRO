@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Prepare downloaded files for import into MariaDB / MySQL database weatherstations
+
+DEBUG=OFF
+
+# Color for output
+
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+blue=$(tput setaf 4)
+reset=$(tput sgr0)
+
+AWK="$(dirname $0)/awk"
+DAT="$(dirname $0)/../HISTORY"
+SED="$(dirname $0)/sed"
+SQL="$(dirname $0)/../SQL"
+TMP=$(mktemp -d)
+TMP=/tmp/
+
+rm "${TMP}/RoomLoggReports.csv" 2>/dev/null
+
+for ((i=1;i<6;i++))
+do
+    #| awk -F ',' -f "${AWK}/${TABLE}.awk" 
+    
+    sed -f "${SED}/report.sed" "${DAT}/"*"${i}A.CSV" \
+    | sed 's#^#'${i}',#;' \
+    >> "${TMP}/RoomLoggReports.csv"
+
+done
