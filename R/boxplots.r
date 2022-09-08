@@ -84,6 +84,7 @@ RoomLogg$Monate <- factor( month(RoomLogg$dateutc), levels = 1:12, labels = Mona
 RoomLogg$KwJahre <- factor( isoJ, levels = isoJJ, labels = isoJJ)
 RoomLogg$Kw <- factor( isoweek(RoomLogg$dateutc), levels = 1:53, labels = paste('Kw', 1:53))
 
+RoomLogg$Tag <- factor( yday(RoomLogg$dateutc), levels = 1:366, labels = 1:366 )
 
 for ( id in unique(RoomLogg$sensor_id) ) {
   
@@ -94,8 +95,7 @@ for ( id in unique(RoomLogg$sensor_id) ) {
   scl <- max(L$Temperature) / max(L$Humidity)
   
   L %>% ggplot() + 
-    geom_boxplot( aes( x = Kw, y = Temperature, fill = Jahre ) , size = 1 ) +
-    # scale_x_datetime() + # ( breaks = '1 hour' ) + 
+    geom_boxplot( aes( x = Kw , y = Temperature, fill = Jahre ) , size = 1 ) +
     scale_y_continuous( labels = function (x) format(x, big.mark = ".", decimal.mark= ',', scientific = FALSE )) +
     expand_limits( y = 15) +
     expand_limits( y = 30) +
@@ -106,12 +106,12 @@ for ( id in unique(RoomLogg$sensor_id) ) {
           , subtitle = 'Temperatur'
           , x = "Datum/Zeit"
           , y = "Temperatur [°C]"
-          , colour = 'Parameter'
+          , colour = 'Jahr'
           , caption = paste( "Stand:", heute )
     ) -> P
   
   ggsave(   
-    file = paste( outdir, id, '.png', sep='')
+    file = paste( outdir, 'Temperature', id, '.png', sep='')
     , plot = P
     , device = 'png'
     , bg = "white"
@@ -121,4 +121,30 @@ for ( id in unique(RoomLogg$sensor_id) ) {
     , dpi = 144
   )
 
+  L %>% ggplot() + 
+    geom_boxplot( aes( x = Kw , y = Humidity, fill = Jahre ) , size = 1 ) +
+    scale_y_continuous( labels = function (x) format(x, big.mark = ".", decimal.mark= ',', scientific = FALSE )) +
+    expand_limits( y = 15) +
+    expand_limits( y = 30) +
+    theme_ipsum() +
+    theme(  legend.position="right"
+            , axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1) ) +
+    labs( title = paste( 'RoomLogg Sensor:', SensorInfo$name[1],'-', SensorInfo$sensorlocation )
+          , subtitle = 'Temperatur'
+          , x = "Datum/Zeit"
+          , y = "Luftfeuchtigkeit [%]"
+          , colour = 'Jahr'
+          , caption = paste( "Stand:", heute )
+    ) -> P
+  
+  ggsave(   
+    file = paste( outdir, 'Humidity', id, '.png', sep='')
+    , plot = P
+    , device = 'png'
+    , bg = "white"
+    , width = 1920
+    , height = 1080
+    , units = "px"
+    , dpi = 144
+  )
 }
