@@ -15,6 +15,7 @@ DROP TABLE IF EXISTS `devices`;
 
 CREATE TABLE `devices` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `devtype` char(64) DEFAULT NULL,
   `name` char(64) DEFAULT NULL,
   `location` char(64) DEFAULT NULL,
   `location_lat` double DEFAULT NULL,
@@ -51,8 +52,8 @@ CREATE TABLE `sensorreports` (
   PRIMARY KEY ( `device_id`,`channel`, `dateutc` )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `devices` VALUES (1, 'Kirche', 'Ramershovener Straße 6, 53359 Rheinbach', 50.626652096, 6.954796314);
-INSERT INTO `devices` VALUES (2, 'Mittelerde', 'Zingsheimstraße 31, 53359 Rheinbach', 50.6209, 6.9616);
+INSERT INTO `devices` VALUES (1, 'RoomLogg PRO', 'Kirche', 'Ramershovener Straße 6, 53359 Rheinbach', 50.6267, 6.9548);
+INSERT INTO `devices` VALUES (2, 'WeatherScreen PRO', 'Mittelerde', 'Zingsheimstraße 31, 53359 Rheinbach', 50.6209, 6.9616);
 
 INSERT INTO `sensors` VALUES ( 1 , 1, 'Empore 1', 'DNT000005' ) ;
 INSERT INTO `sensors` VALUES ( 1 , 2, 'Empore 2', 'DNT000005' ) ;
