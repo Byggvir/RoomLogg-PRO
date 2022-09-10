@@ -33,7 +33,18 @@ Then go to the bash directory and convert the data with the BASH script  ***conv
     cd bash
     ./convert4import
     cd ../SQL
-    mysql --user=youruser --password  < import-reports.sql
+    mysql --user=youruser --password  < import.sql
+```
+
+### Import sample data
+
+
+Sample data of ***sensorreports*** is dumped into ***/SQL/dump.sql*** which compressed with gzip to ***dump.sql.gz***. You can import the data with the following commnands.
+
+```
+    cd SQL
+    gunzip dump.sql.gz
+    mysql --user=youruser --password  < dump.sql
 ```
 
 ## R-Scripts

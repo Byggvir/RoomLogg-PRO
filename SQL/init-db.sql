@@ -52,9 +52,16 @@ CREATE TABLE `sensorreports` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO `devices` VALUES (1, 'Kirche', 'Ramershovener Straße 6, 53359 Rheinbach', 50.626652096, 6.954796314);
+INSERT INTO `devices` VALUES (2, 'Mittelerde', 'Zingsheimstraße 31, 53359 Rheinbach', 50.6209, 6.9616);
 
 INSERT INTO `sensors` VALUES ( 1 , 1, 'Empore 1', 'DNT000005' ) ;
 INSERT INTO `sensors` VALUES ( 1 , 2, 'Empore 2', 'DNT000005' ) ;
 INSERT INTO `sensors` VALUES ( 1 , 3, 'Altar', 'DNT000005' ) ;
 INSERT INTO `sensors` VALUES ( 1 , 4, 'tbd', 'DNT000005' ) ;
 INSERT INTO `sensors` VALUES ( 1 , 5, 'Außen', 'DNT000005' ) ;
+
+INSERT INTO `sensors` VALUES (2 , 2, 'Schlafzimmer', 'DNT000005') ;
+INSERT INTO `sensors` VALUES (2 , 4, 'Daniel', 'DNT000005') ;
+INSERT INTO `sensors` VALUES (2 , 5, 'Stephan', 'DNT000005') ;
+INSERT INTO `sensors` VALUES (2 , 8, 'Wintergarten', 'DNT000005') ;
+

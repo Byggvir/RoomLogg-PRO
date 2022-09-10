@@ -106,7 +106,7 @@ for ( D in 1:nrow(Devices)) {
     scl <- max(L$Temperature) / max(L$Humidity)
   
     L %>% ggplot() + 
-      geom_boxplot( aes( x = Kw , y = Temperature, fill = Jahre ) , size = 1 ) +
+      geom_boxplot( aes( x = Kw , y = Temperature, fill = Jahre ) , size = 0.1 ) +
       scale_y_continuous( labels = function (x) format(x, big.mark = ".", decimal.mark= ',', scientific = FALSE )) +
       expand_limits( y = 15) +
       expand_limits( y = 30) +
@@ -133,7 +133,7 @@ for ( D in 1:nrow(Devices)) {
     )
 
     L %>% ggplot() + 
-      geom_boxplot( aes( x = Kw , y = Humidity, fill = Jahre ) , size = 1 ) +
+      geom_boxplot( aes( x = Kw , y = Humidity, fill = Jahre ) , size = 0.1 ) +
       scale_y_continuous( labels = function (x) format(x, big.mark = ".", decimal.mark= ',', scientific = FALSE )) +
       expand_limits( y = 15) +
       expand_limits( y = 30) +
