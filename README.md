@@ -1,7 +1,7 @@
 # RoomLogg-PRO
-R scripts to display recorded data from dnt RoomLogg PRO
+R scripts to display recorded data from **dnt RoomLogg PRO**
 
-dnt RoomLoog PRO records the readings from up to eight sensors on an SD card.
+***dnt RoomLoog PRO*** records the readings from up to eight sensors on an SD card.
 
 The data is saved in CSV files in the HISTORY folder. This application imports the data into a SQL database using a BASH script. The R scripts retrieve measured values from the database, evaluate the data and draw corresponding diagrams.
 
@@ -15,9 +15,9 @@ To create the SQL database with a ***dnt RoomLogg PRO*** and 5 sensors as an exa
     mysql --user=root --password < SQL/init-db.sql```
 ```
 
-This script will create a databse ***RoomLogg*** with three tables ***logger***, ***sensor*** and ***reports***.
+This script will create a database ***RoomLogg*** with three tables ***logger***, ***sensor*** and ***reports***.
 
-Your can manage multiple ***RoomLogg PRO*** with multiple sensors.
+Your can manage multiple ***dnt RoomLogg PRO*** with multiple sensors.
 
 In order to be able to access the SQL database with the R script, copy the sample configuration file ***SQL/RoomLogg.conf*** to the directory ***~/R/sql.conf.d/*** in your home directory and adjust the user and password according to your needs.
 

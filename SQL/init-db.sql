@@ -11,9 +11,9 @@ USE `RoomLogg`;
 -- Table structure for table `sensor`
 --
 
-DROP TABLE IF EXISTS `logger`;
+DROP TABLE IF EXISTS `devices`;
 
-CREATE TABLE `logger` (
+CREATE TABLE `devices` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` char(64) DEFAULT NULL,
   `location` char(64) DEFAULT NULL,
@@ -26,36 +26,35 @@ CREATE TABLE `logger` (
 
 DROP TABLE IF EXISTS `sensor`;
 
-CREATE TABLE `sensor` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `logger_id` int(11) NOT NULL,
+CREATE TABLE `sensors` (
+  `device_id` int(11) NOT NULL,
   `channel` int(11) NOT NULL,
   `sensorlocation` char(64) DEFAULT NULL,
   `sensortype` char(64) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  INDEX (`logger_id`, `channel`)
+  PRIMARY KEY (`device_id`, `channel`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Table structure for table `reports`
 --
 
-DROP TABLE IF EXISTS `reports`;
+DROP TABLE IF EXISTS `sensorreports`;
 
-CREATE TABLE `reports` (
-  `sensor_id` int(11) NOT NULL,
+CREATE TABLE `sensorreports` (
+  `device_id` int(11) NOT NULL,
+  `channel` int(11) NOT NULL,
   `dateutc` datetime NOT NULL,
   `Temperature` double DEFAULT NULL,
   `Humidity` double DEFAULT NULL,
   `Dewpoint` double DEFAULT NULL,
   `HeatIndex` double DEFAULT NULL,
-  PRIMARY KEY ( `sensor_id`, `dateutc` )
+  PRIMARY KEY ( `device_id`,`channel`, `dateutc` )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `logger` VALUES (1, 'Kirche', 'Ramershovener Straße 6, 53359 Rheinbach', 50.626652096, 6.954796314);
+INSERT INTO `devices` VALUES (1, 'Kirche', 'Ramershovener Straße 6, 53359 Rheinbach', 50.626652096, 6.954796314);
 
-INSERT INTO `sensor` VALUES (1, 1 , 1, 'Empore 1', 'DNT000005') ;
-INSERT INTO `sensor` VALUES (2, 1 , 2, 'Empore 2', 'DNT000005') ;
-INSERT INTO `sensor` VALUES (3, 1 , 3, 'Altar', 'DNT000005') ;
-INSERT INTO `sensor` VALUES (4, 1 , 4, 'tbd', 'DNT000005') ;
-INSERT INTO `sensor` VALUES (5, 1 , 3, 'Außen', 'DNT000005') ;
+INSERT INTO `sensors` VALUES ( 1 , 1, 'Empore 1', 'DNT000005' ) ;
+INSERT INTO `sensors` VALUES ( 1 , 2, 'Empore 2', 'DNT000005' ) ;
+INSERT INTO `sensors` VALUES ( 1 , 3, 'Altar', 'DNT000005' ) ;
+INSERT INTO `sensors` VALUES ( 1 , 4, 'tbd', 'DNT000005' ) ;
+INSERT INTO `sensors` VALUES ( 1 , 5, 'Außen', 'DNT000005' ) ;
