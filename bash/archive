@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Append data to archive files
+
+DEBUG=OFF
+
+# Color for output
+
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+blue=$(tput setaf 4)
+reset=$(tput sgr0)
+
+AWK="$(dirname $0)/awk"
+DAT="$(dirname $0)/../HISTORY"
+SED="$(dirname $0)/sed"
+SQL="$(dirname $0)/../SQL"
+TMP=$(mktemp -d)
+TMP=/tmp/
+
+mkdir -p "${DAT}/Archive/"
+
+for F in "${DAT}/"*"A.CSV"
+do
+    FILE=$(basename "$F")
+    sed '1d;' "${DAT}/${FILE}" \
+    >> "${DAT}/Archive/${FILE}"
+
+done
