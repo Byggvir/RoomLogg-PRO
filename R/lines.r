@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 #
 #
-# Script: boxplots.r
+# Script: lines.r
 #
 # Stand: 2022-09-07
 # (c) 2022 by Thomas Arend, Rheinbach
@@ -60,82 +60,56 @@ dir.create( outdir , showWarnings = FALSE, recursive = FALSE, mode = "0777")
 today <- Sys.Date()
 heute <- format(today, "%Y%m%d")
 
-SQL <- paste( 'select * from devices;')
-Devices <- RunSQL(SQL)
-
-SQL <- paste( 
-  'select * from sensorreports;'
-)
-
-SensorReports <- RunSQL(SQL)
-
-# Jahr
-
-J <- year(SensorReports$dateutc)
-JJ <- unique(J)
-
-# Year of calendarweek
-
-isoJ <- isoyear(SensorReports$dateutc)
-isoJJ <- unique(isoJ)
-
-# Factor dateutc
-
-SensorReports$Jahre <- factor( J, levels = JJ, labels = JJ)
-SensorReports$Monate <- factor( month(SensorReports$dateutc), levels = 1:12, labels = Monatsnamen)
-
-SensorReports$KwJahre <- factor( isoJ, levels = isoJJ, labels = isoJJ)
-SensorReports$Kw <- factor( isoweek(SensorReports$dateutc), levels = 1:53, labels = paste('Kw', 1:53))
-
-SensorReports$Tag <- factor( yday(SensorReports$dateutc), levels = 1:366, labels = 1:366 )
-
+Devices <- GetDevices()
 
 for ( D in 1:nrow(Devices)) {
   
   DevName = Devices$name[D] 
   DevId = Devices$id[D]
   
-  SQLsensor <- paste('select * from sensors as S join devices as D on S.device_id = D.id where D.id = ', D, ';')
-  Sensors <- RunSQL(SQLsensor)
+  Sensors <- GetSensors(DevId = D)
   
   for ( C in 1:nrow(Sensors) ) {
     
     Chan <- Sensors$channel[C]
     SenLocation <- Sensors$sensorlocation[C]
-
-    L <- SensorReports %>% filter ( channel == Chan & device_id == DevId )
-    scl <- max(L$Temperature) / max(L$Humidity)
+    print(c(Chan,SenLocation))
     
-    L %>% ggplot() + 
+    SensorReports <- GetReports( DevId = DevId, Channel =  Chan)
+    
+    scl <- max( SensorReports$Temperature)# / max(SensorReports$Humidity / 100)
+  
+    SensorReports %>% ggplot() + 
       geom_line( aes( x = dateutc, y = Temperature, colour = 'Temperatur' ) , size = 1 ) +
-      geom_line( aes( x = dateutc, y = Humidity * scl, colour = 'Luftfeuchte' ) , size = 1 ) +
+      geom_line( aes( x = dateutc, y = Humidity * scl / 100 , colour = 'Luftfeuchte' ) , size = 1 ) +
       scale_x_datetime() + # ( breaks = '1 hour' ) + 
       scale_y_continuous( labels = function (x) format(x, big.mark = ".", decimal.mark= ',', scientific = FALSE ),
                           sec.axis = sec_axis( ~. / scl, name = "Luftfeuchte"
-                                               , labels = function (x) format(x, big.mark = ".", decimal.mark= ',', scientific = FALSE ))) +
-      # expand_limits( y = 0) +
-      theme_ipsum() +
-      theme(  legend.position="right"
-              , axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1) ) +
-      labs( title = paste( 'Messwerte des Sensors', SenLocation ,'an Station', DevName )
-            , subtitle = 'Temperatur und Luftfeuchte'
-            , x = "Datum/Zeit"
-            , y = "Temperatur [°C]"
-            , colour = 'Parameter'
-            , caption = paste( "Stand:", heute )
-      ) -> P
+                                             , labels = scales::percent )) +
+      scale_color_manual(values=c('blue','red')) +
+      expand_limits( y = 0) +
+    theme_ipsum() +
+    theme(  legend.position="right"
+            , axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1) ) +
+    labs( title = paste( 'Sensor:', SenLocation ,'an Station', DevName )
+          , subtitle = 'Temperatur und Luftfeuchte'
+          , x = "Datum/Zeit"
+          , y = "Temperatur [°C]"
+          , colour = 'Parameter'
+          , caption = paste( "Stand:", heute )
+    ) -> P
 
-    ggsave(   
-      file = paste( outdir, DevName, '-', SenLocation, '.png', sep='')
-      , plot = P
-      , device = 'png'
-      , bg = "white"
-      , width = 1920
-      , height = 1080
-      , units = "px"
-      , dpi = 144
-    )
+  ggsave(   
+    file = paste( outdir, DevName, '-', SenLocation, '.png', sep='')
+    , plot = P
+    , device = 'png'
+    , bg = "white"
+    , width = 1920
+    , height = 1080
+    , units = "px"
+    , dpi = 144
+  )
   
-  } # end SensorReports
-
+  } # end sensors
+  
 } # end devices
