@@ -8,7 +8,7 @@
 # E-Mail: thomas@arend-rhb.de
 #
 
-MyScriptName <- "boxplots"
+MyScriptName <- "boxplots-month"
 
 options(OutDec=',')
 
