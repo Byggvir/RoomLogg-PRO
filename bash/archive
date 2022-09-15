@@ -12,18 +12,26 @@ blue=$(tput setaf 4)
 reset=$(tput sgr0)
 
 AWK="$(dirname $0)/awk"
-DAT="$(dirname $0)/../HISTORY"
+DAT="$(dirname $0)/../data"
 SED="$(dirname $0)/sed"
 SQL="$(dirname $0)/../SQL"
 TMP=$(mktemp -d)
 TMP=/tmp/
 
-mkdir -p "${DAT}/Archive/"
 
-for F in "${DAT}/"*"A.CSV"
+if [ -n "$1" ]
+then
+    STATION=$1
+else
+    STATION=1
+fi
+
+mkdir -p "${DAT}/${STATION}/Archiv"
+
+for F in "${DAT}/${STATION}/"*"A.CSV"
 do
     FILE=$(basename "$F")
-    sed '1d;' "${DAT}/${FILE}" \
-    >> "${DAT}/Archive/${FILE}"
+    sed '1d;' "${DAT}/${STATION}/${FILE}" \
+    >> "${DAT}/${STATION}/Archive/${FILE}"
 
 done
